@@ -1,0 +1,14 @@
+{
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "files.autoSave": "onFocusChange",
+    "javascript.validate.enable": false,
+    "editor.formatOnSave": true,
+    "terminal.integrated.fontSize": 14,
+    "python.pythonPath": "/usr/bin/python3",
+    "solargraph.diagnostics": true,
+    "solargraph.formatting": true,
+    "solargraph.hover": true,
+    "solargraph.completion": true,
+    "solargraph.useBundler": true
+  }

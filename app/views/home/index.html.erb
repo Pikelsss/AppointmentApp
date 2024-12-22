@@ -1,0 +1,9 @@
+<!-- app/views/home/index.html.erb -->
+<h1>Welcome to the TodoApp</h1>
+<% if user_signed_in? %>
+<%= link_to 'Go to Dashboard', dashboard_path, class: 'btn btn-primary' %>
+<%= link_to 'Manage Appointments', appointments_path, class: 'btn btn-secondary' %>
+<% else %>
+<%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-primary' %> |
+<%= link_to 'Login', new_user_session_path, class: 'btn btn-secondary' %>
+<% end %>

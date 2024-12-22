@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item: MyString
+  completed: false
+  appointment: one
+
+two:
+  item: MyString
+  completed: false
+  appointment: two

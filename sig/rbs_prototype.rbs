@@ -1,0 +1,19 @@
+Usage: rbs prototype rb [files...]
+
+Generate RBS prototype from source code.
+It parses specified Ruby code and and generates RBS prototypes.
+
+It only works on MRI because it parses Ruby code with `RubyVM::AbstractSyntaxTree`.
+
+Examples:
+
+  $ rbs prototype rb lib/foo.rb
+  $ rbs prototype rbi sorbet/rbi/foo.rbi
+
+You can run the tool in *batch* mode by passing `--out-dir` option.
+
+  $ rbs prototype rb --out-dir=sig lib/foo.rb
+  $ rbs prototype rbi --out-dir=sig/models --base-dir=app/models app/models
+        --out-dir=DIR                Specify the path to save the generated RBS files
+        --base-dir=DIR               Specify the path to calculate the relative path to save the generated RBS files
+        --force                      Overwrite existing RBS files
