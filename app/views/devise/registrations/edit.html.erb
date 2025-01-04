@@ -1,51 +1,31 @@
-<!-- app/views/devise/registrations/edit.html.erb -->
-<div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow" data-controller="dark-mode">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-xl text-gray-900 dark:text-white">Edit Profile</h1>
-
-    <!-- Dark Mode Toggle Button -->
-    <button data-action="dark-mode#toggle" class="flex items-center px-3 py-2 rounded-md bg-gray-100 dark:bg-slate-700">
-      <!-- Sun icon -->
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-      </svg>
-      <!-- Moon icon -->
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-      </svg>
-      <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-        <span class="block dark:hidden">Dark Mode</span>
-        <span class="hidden dark:block">Light Mode</span>
-      </span>
-    </button>
-  </div>
+<div>
+  <h1>Edit Profile</h1>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <!-- Your existing form fields remain the same -->
-  <div class="mb-4">
-    <%= f.label :email, class: "block mb-2 text-gray-700 dark:text-gray-200" %>
-    <%= f.email_field :email, class: "w-full border dark:border-gray-600 p-2 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100" %>
+  <div>
+    <%= f.label :email %>
+    <%= f.email_field :email %>
   </div>
 
-  <div class="mb-4">
-    <%= f.label :password, class: "block mb-2 text-gray-700 dark:text-gray-200" %>
-    <%= f.password_field :password, class: "w-full border dark:border-gray-600 p-2 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100" %>
-    <small class="text-gray-500 dark:text-gray-400">Leave blank if you don't want to change it</small>
+  <div>
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+    <small>Leave blank if you don't want to change it</small>
   </div>
 
-  <div class="mb-4">
-    <%= f.label :password_confirmation, class: "block mb-2 text-gray-700 dark:text-gray-200" %>
-    <%= f.password_field :password_confirmation, class: "w-full border dark:border-gray-600 p-2 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100" %>
+  <div>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
   </div>
 
-  <div class="mb-4">
-    <%= f.label :current_password, class: "block mb-2 text-gray-700 dark:text-gray-200" %>
-    <%= f.password_field :current_password, class: "w-full border dark:border-gray-600 p-2 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100" %>
-    <small class="text-gray-500 dark:text-gray-400">We need your current password to confirm changes</small>
+  <div>
+    <%= f.label :current_password %>
+    <%= f.password_field :current_password %>
+    <small>We need your current password to confirm changes</small>
   </div>
 
-  <div class="flex justify-end">
-    <%= f.submit "Update", class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors" %>
+  <div>
+    <%= f.submit "Update" %>
   </div>
   <% end %>
 </div>

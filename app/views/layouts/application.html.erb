@@ -1,37 +1,18 @@
-<!-- app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>TodoApp</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment App</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
 </head>
 
-<body class="bg-gray-100">
-  <!-- Simple Navigation -->
-  <nav class="bg-white border-b">
-    <div class="max-w-7xl mx-auto px-4 py-4">
-      <div class="flex justify-between">
-        <div class="flex space-x-4">
-          <%= link_to 'Appointments', appointments_path, class: 'text-gray-700' %>
-        </div>
-        <div class="flex space-x-4">
-          <% if user_signed_in? %>
-          <%= link_to 'Profile', edit_user_registration_path, class: 'text-gray-700' %>
-          <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'text-gray-700' %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Content -->
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <%= yield %>
-  </div>
+<body>
+  <%= yield %>
 </body>
 
 </html>

@@ -1,27 +1,106 @@
-<!-- app/views/appointments/new.html.erb -->
-<div class="mx-auto max-w-3xl px-4 py-8">
-  <div class="rounded-lg bg-white p-6 shadow-lg">
-    <h2 class="mb-6 text-2xl font-bold">Create New Appointment</h2>
-    <%= form_with(model: @appointment, local: true, class: "space-y-6") do |f| %>
-    <div>
-      <%= f.label :title, class: "block text-sm font-medium text-gray-700" %>
-      <%= f.text_field :title, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500" %>
-    </div>
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <%= f.label :start_date, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.datetime_local_field :start_date, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500" %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Appointment - Appointment App</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-animated-gradient {
+      background: linear-gradient(-45deg, #667eea, #764ba2, #6b8dd6, #8e37d7);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 1s ease-out;
+    }
+
+    .input-focus:focus {
+      border-color: #6e7dff;
+      box-shadow: 0 0 0 2px rgba(110, 125, 255, 0.5);
+    }
+  </style>
+</head>
+
+<body class="bg-animated-gradient flex justify-center items-center min-h-screen">
+
+  <div class="bg-white shadow-xl border border-gray-300 w-[90%] max-w-[600px] p-8 relative slide-in rounded-lg">
+    <nav class="absolute top-0 left-0 right-0 mx-auto w-fit bg-white border border-gray-300 shadow-md flex space-x-4 p-2 -translate-y-1/2 rounded-lg">
+      <a href="<%= appointments_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">Appointment</a>
+      <a href="<%= about_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">About Page</a>
+      <a href="<%= new_user_registration_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">Accounts</a>
+      <a href="<%= settings_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">Settings</a>
+    </nav>
+
+    <div class="text-center mt-16">
+      <h1 class="text-3xl font-bold text-gray-800 mb-8">Create Your Appointment</h1>
+
+      <%= form_with model: @appointment, local: true do |form| %>
+      <div class="mb-4">
+        <%= form.label :title, "Appointment Name:", class: "block text-left font-medium text-gray-700" %>
+        <%= form.text_field :title, placeholder: "Enter appointment name", class: "w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" %>
+      </div>
+      <div class="grid grid-cols-2 gap-6 mb-4">
+        <div>
+          <%= form.label :start_date, "Start Date:", class: "block font-medium text-gray-700" %>
+          <%= form.datetime_local_field :start_date, class: "w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" %>
+        </div>
+        <div>
+          <%= form.label :end_date, "End Date:", class: "block font-medium text-gray-700" %>
+          <%= form.datetime_local_field :end_date, class: "w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" %>
+        </div>
+      </div>
+      <div class="mb-4">
+        <%= form.label :description, "Description:", class: "block font-medium text-gray-700" %>
+        <%= form.text_area :description, rows: 4, placeholder: "Describe your appointment...", class: "w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" %>
       </div>
       <div>
-        <%= f.label :end_date, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.datetime_local_field :end_date, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500" %>
+        <%= form.submit "Create Appointment", class: "mt-6 bg-blue-600 text-white px-6 py-3 rounded-md w-full hover:bg-blue-700 transition-all duration-300 font-semibold" %>
       </div>
+      <% end %>
+
+      <% if @appointment.persisted? %>
+      <div class="mt-6">
+        <a href="<%= appointment_path(@appointment) %>" class="block bg-green-600 text-white px-6 py-3 rounded-md w-full hover:bg-green-700 transition-all duration-300 font-semibold text-center">
+          View Appointment
+        </a>
+      </div>
+      <% end %>
     </div>
-    <div>
-      <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
-      <%= f.text_area :description, rows: 4, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500" %>
-    </div>
-    <%= f.submit "Create", class: "rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" %>
-    <% end %>
   </div>
-</div>
+
+</body>
+
+</html>

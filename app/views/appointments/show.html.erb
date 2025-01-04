@@ -1,18 +1,113 @@
-<p>
-  <strong>Title:</strong>
-  <%= @appointment.title %>
-</p>
-<p>
-  <strong>Description:</strong>
-  <%= @appointment.description %>
-</p>
-<p>
-  <strong>Date:</strong>
-  <%= @appointment.date %>
-</p>
-<p>
-  <strong>Time:</strong>
-  <%= @appointment.time %>
-</p>
-<%= link_to 'Edit', edit_appointment_path(@appointment) %> |
-<%= link_to 'Back', appointments_path %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Details - Appointment App</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-animated-gradient {
+      background: linear-gradient(-45deg, #667eea, #764ba2, #6b8dd6, #8e37d7);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-animated-gradient flex justify-center items-center min-h-screen">
+  <div class="bg-white shadow-xl border border-gray-300 w-[90%] max-w-[600px] p-8 relative rounded-lg">
+    <nav class="absolute top-0 left-0 right-0 mx-auto w-fit bg-white border border-gray-300 shadow-md flex space-x-4 p-2 -translate-y-1/2 rounded-lg">
+      <a href="<%= appointments_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">Appointment</a>
+      <a href="<%= about_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">About Page</a>
+      <a href="<%= new_user_registration_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">Accounts</a>
+      <a href="<%= settings_path %>" class="px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200">Settings</a>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-center mb-6 mt-16">Appointment Details</h1>
+
+    <p class="mb-4">
+      <strong class="font-semibold">Title:</strong>
+      <span><%= @appointment.title %></span>
+    </p>
+    <p class="mb-4">
+      <strong class="font-semibold">Description:</strong>
+      <span><%= @appointment.description %></span>
+    </p>
+    <p class="mb-4">
+      <strong class="font-semibold">Date:</strong>
+      <span><%= @appointment.start_date.strftime('%B %d, %Y') %></span>
+    </p>
+    <p class="mb-4">
+      <strong class="font-semibold">Time:</strong>
+      <span><%= @appointment.start_date.strftime('%I:%M %p') %></span>
+    </p>
+
+    <h2 class="text-xl font-semibold mt-8 mb-4">All Appointments</h2>
+    <div class="bg-gray-100 p-4 rounded-md">
+      <% if @appointments.present? %>
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th class="text-left">Title</th>
+            <th class="text-left">Description</th>
+            <th class="text-left">Date</th>
+            <th class="text-left">Time</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @appointments.each do |appointment| %>
+          <tr class="border-t">
+            <td class="py-3"><%= appointment.title %></td>
+            <td><%= appointment.description %></td>
+            <td><%= appointment.start_date.strftime('%B %d, %Y') %></td>
+            <td><%= appointment.start_date.strftime('%I:%M %p') %></td>
+            <td class="text-right">
+              <%= link_to 'View', appointment_path(appointment), class: 'text-blue-500' %>
+              <%= link_to 'Edit', edit_appointment_path(appointment), class: 'text-blue-500 ml-2' %>
+              <%= button_to 'Delete', appointment_path(appointment),
+                    method: :delete,
+                    form: { data: { turbo_confirm: 'Are you sure?' } },
+                    class: "text-red-500 ml-2" %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% else %>
+      <p>No appointments available.</p>
+      <% end %>
+    </div>
+
+    <div class="flex justify-between mt-6">
+      <%= link_to 'Edit', edit_appointment_path(@appointment), class: 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200' %>
+      <%= link_to 'Back', appointments_path, class: 'bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-200' %>
+      <%= button_to 'Delete', appointment_path(@appointment), 
+        method: :delete, 
+        form: { data: { turbo_confirm: 'Are you sure?' } },
+        class: "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200" 
+      %>
+    </div>
+  </div>
+</body>
+
+</html>

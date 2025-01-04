@@ -1,16 +1,71 @@
-<h2>Forgot your password?</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password - Appointment App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-gradient {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .pulse:hover {
+      animation: pulse 0.5s ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="flex items-center justify-center h-screen bg-gradient">
+  <div class="bg-white p-8 rounded-md shadow-2xl w-96 transform hover:scale-105 transition duration-300 fade-in">
+    <h1 class="text-center text-2xl font-bold mb-6 text-gray-700">Forgot Your Password?</h1>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }, class: "space-y-4") do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div>
+      <%= f.label :email, class: "block text-sm font-medium text-gray-600 mb-1" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none", placeholder: "Enter your email" %>
+    </div>
+
+    <div>
+      <%= f.submit "Send me reset password instructions", class: "w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition font-semibold pulse" %>
+    </div>
+    <% end %>
+
+    <p class="text-sm text-center text-gray-600 mt-4">
+      Remembered your password?
+      <%= link_to "Sign in here", new_user_session_path, class: "text-blue-500 hover:underline" %>
+    </p>
   </div>
+</body>
 
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</html>

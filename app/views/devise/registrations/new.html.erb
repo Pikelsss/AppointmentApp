@@ -1,37 +1,84 @@
-<!-- app/views/devise/registrations/new.html.erb -->
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Appointment App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-gradient {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .pulse:hover {
+      animation: pulse 0.5s ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="flex items-center justify-center h-screen bg-gradient">
+  <div class="bg-white p-8 rounded-md shadow-2xl w-96 transform hover:scale-105 transition duration-300 fade-in">
+    <h1 class="text-center text-2xl font-bold mb-6 text-gray-700">Create Your Account</h1>
+    <%= form_with model: @user, url: new_user_registration_path, local: true, class: "space-y-4" do |form| %>
     <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up for an account</h2>
-    </div>
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-8 space-y-6" }) do |f| %>
-    <%= devise_error_messages! %>
-    <div class="rounded-md shadow-sm -space-y-px">
-      <div>
-        <%= f.label :username, class: "sr-only" %>
-        <%= f.text_field :username, autofocus: true, class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "Username" %>
-      </div>
-      <div>
-        <%= f.label :email, class: "sr-only" %>
-        <%= f.email_field :email, class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "Email address" %>
-      </div>
-      <div>
-        <%= f.label :password, class: "sr-only" %>
-        <%= f.password_field :password, autocomplete: "off", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "Password" %>
-      </div>
-      <div>
-        <%= f.label :password_confirmation, class: "sr-only" %>
-        <%= f.password_field :password_confirmation, autocomplete: "off", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "Confirm Password" %>
-      </div>
+      <%= form.label :username, class: "block text-sm font-medium text-gray-600 mb-1" %>
+      <%= form.text_field :username, class: "w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none", placeholder: "Enter your username" %>
     </div>
 
     <div>
-      <%= f.submit "Sign up", class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      <%= form.label :email, class: "block text-sm font-medium text-gray-600 mb-1" %>
+      <%= form.email_field :email, class: "w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none", placeholder: "Enter your email" %>
+    </div>
+
+    <div>
+      <%= form.label :password, class: "block text-sm font-medium text-gray-600 mb-1" %>
+      <%= form.password_field :password, class: "w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none", placeholder: "Enter your password" %>
+    </div>
+
+    <div>
+      <%= form.label :password_confirmation, class: "block text-sm font-medium text-gray-600 mb-1" %>
+      <%= form.password_field :password_confirmation, class: "w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none", placeholder: "Confirm your password" %>
+    </div>
+
+    <div>
+      <%= form.submit "Sign Up", class: "w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition font-semibold pulse" %>
     </div>
     <% end %>
 
-    <div class="text-sm text-center">
-      <%= render "devise/shared/links" %>
-    </div>
+    <p class="text-sm text-center text-gray-600 mt-4">
+      Already have an account?
+      <%= link_to "Sign in here", new_user_session_path, class: "text-blue-500 hover:underline" %>
+    </p>
   </div>
-</div>
+</body>
+
+</html>

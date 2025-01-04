@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Account - Appointment App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-animated-gradient {
+      background: linear-gradient(-45deg, #667eea, #764ba2, #6b8dd6, #8e37d7);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 1s ease-out;
+    }
+
+    .input-focus:focus {
+      border-color: #6e7dff;
+      box-shadow: 0 0 0 2px rgba(110, 125, 255, 0.5);
+    }
+  </style>
+</head>
+
+<body class="bg-animated-gradient flex justify-center items-center min-h-screen">
+  <div class="bg-white shadow-xl border border-gray-300 w-[600px] p-8 relative slide-in rounded-lg">
+    <h1 class="text-2xl font-bold mb-4 text-center">Edit Account</h1>
+
+    <%= form_for(@user, url: user_registration_path, method: :put, html: { class: 'space-y-4' }) do |f| %>
+    <div>
+      <%= f.label :email, class: 'block text-gray-700' %>
+      <%= f.email_field :email, class: 'input-focus border border-gray-300 rounded-md p-2 w-full' %>
+    </div>
+
+    <div>
+      <%= f.label :password, class: 'block text-gray-700' %>
+      <%= f.password_field :password, class: 'input-focus border border-gray-300 rounded-md p-2 w-full', autocomplete: 'new-password' %>
+      <small class="text-gray-500">Leave blank if you don't want to change it</small>
+    </div>
+
+    <div>
+      <%= f.label :password_confirmation, class: 'block text-gray-700' %>
+      <%= f.password_field :password_confirmation, class: 'input-focus border border-gray-300 rounded-md p-2 w-full', autocomplete: 'new-password' %>
+    </div>
+
+    <div class="flex justify-center mt-4">
+      <%= f.submit 'Update Account', class: 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200' %>
+    </div>
+    <% end %>
+  </div>
+</body>
+
+</html>

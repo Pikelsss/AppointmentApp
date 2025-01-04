@@ -1,6 +1,74 @@
-<!-- app/views/appointments/edit.html.erb -->
-<div class="container mt-4">
-  <h1>Edit Appointment</h1>
-  <%= render 'form', appointment: @appointment %>
-  <%= link_to 'Back', appointments_path, class: 'btn btn-secondary mt-3' %>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Appointment - Appointment App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-animated-gradient {
+      background: linear-gradient(-45deg, #667eea, #764ba2, #6b8dd6, #8e37d7);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .zoom:hover {
+      animation: zoomIn 0.5s forwards, shadowPulse 0.5s forwards;
+      background: linear-gradient(135deg, #667eea, #6b8dd6);
+      color: white;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body class="bg-animated-gradient flex justify-center items-center min-h-screen">
+  <div class="bg-white shadow-xl border border-gray-300 w-[600px] p-8 relative rounded-lg">
+    <div class="absolute top-0 left-0 right-0 mx-auto w-fit bg-white border border-gray-300 shadow-md flex space-x-4 p-2 -translate-y-1/2 rounded-lg">
+      <%= link_to 'Appointment', new_appointment_path, class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
+      <%= link_to 'About Page', about_path, class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
+      <%= link_to 'Accounts', new_user_registration_path, class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
+      <%= link_to 'Settings', '#', class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
+    </div>
+
+    <h1 class="text-3xl font-bold text-center mt-12 mb-6">Edit Appointment</h1>
+
+    <%= form_with model: @appointment, local: true, class: 'space-y-4' do |form| %>
+    <div>
+      <%= form.label :title, "Appointment Name:", class: 'block text-gray-700 font-semibold mb-2' %>
+      <%= form.text_field :title, placeholder: "Enter appointment name", class: 'w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+    </div>
+    <div>
+      <%= form.label :start_date, "Start Date:", class: 'block text-gray-700 font-semibold mb-2' %>
+      <%= form.datetime_local_field :start_date, class: 'w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+    </div>
+    <div>
+      <%= form.label :end_date, "End Date:", class: 'block text-gray-700 font-semibold mb-2' %>
+      <%= form.datetime_local_field :end_date, class: 'w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+    </div>
+    <div>
+      <%= form.label :description, "Description:", class: 'block text-gray-700 font-semibold mb-2' %>
+      <%= form.text_area :description, rows: 4, placeholder: "Describe your appointment...", class: 'w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+    </div>
+    <div class="flex justify-end mt-4">
+      <%= form.submit "Update Appointment", class: 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200' %>
+    </div>
+    <% end %>
+  </div>
+</body>
+
+</html>

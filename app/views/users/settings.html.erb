@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Appointment App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-animated-gradient {
+      background: linear-gradient(-45deg, #667eea, #764ba2, #6b8dd6, #8e37d7);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+    }
+
+    /* Dark Mode Styles */
+    .dark-mode {
+      background-color: #1a202c;
+      color: #edf2f7;
+    }
+
+    .dark-mode .bg-white {
+      background-color: #2d3748 !important;
+    }
+
+    .dark-mode .text-gray-700 {
+      color: #edf2f7 !important;
+    }
+
+    .dark-mode .border-gray-300 {
+      border-color: #4a5568 !important;
+    }
+
+    .dark-mode .hover\:bg-gray-200:hover {
+      background-color: #4a5568 !important;
+    }
+
+    .dark-mode .hover\:bg-blue-600:hover {
+      background-color: #2b6cb0 !important;
+    }
+
+    .dark-mode .bg-red-500 {
+      background-color: #e53e3e !important;
+    }
+
+    .dark-mode .hover\:bg-red-600:hover {
+      background-color: #c53030 !important;
+    }
+
+    .dark-mode .bg-blue-500 {
+      background-color: #3182ce !important;
+    }
+
+    .dark-mode .hover\:bg-gray-200:hover {
+      background-color: #4a5568 !important;
+    }
+  </style>
+</head>
+
+<body class="bg-animated-gradient flex justify-center items-center min-h-screen transition-colors duration-500">
+  <div class="bg-white shadow-xl border border-gray-300 w-[600px] p-8 relative rounded-md transition-colors duration-500">
+    <!-- Navbar -->
+    <div class="absolute top-0 left-0 right-0 mx-auto w-fit bg-white border border-gray-300 shadow-md flex space-x-4 p-2 -translate-y-1/2 rounded-lg transition-colors duration-500">
+      <%= link_to 'Appointment', new_appointment_path, class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
+      <%= link_to 'About Page', about_path, class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
+      <%= link_to 'Accounts', new_user_registration_path, class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
+      <%= link_to 'Settings', settings_path, class: 'px-4 py-2 bg-gray-200 rounded-md transition duration-200 zoom' %>
+    </div>
+
+    <!-- Settings Content -->
+    <div class="mt-16 text-center">
+      <h1 class="text-3xl font-bold mb-4 text-gray-700 transition-colors duration-500">Settings</h1>
+      <p class="text-lg mb-6 text-gray-700 transition-colors duration-500">Manage your preferences and application settings below.</p>
+
+      <!-- Dark Mode Toggle -->
+      <div class="mb-6">
+        <label for="dark-mode-toggle" class="flex items-center cursor-pointer space-x-3">
+          <span class="text-gray-700 font-semibold transition-colors duration-500">Dark Mode</span>
+          <input id="dark-mode-toggle" type="checkbox" class="hidden" />
+          <span class="w-12 h-6 bg-gray-300 rounded-full relative">
+            <span class="dot w-6 h-6 bg-white absolute top-0.5 left-0.5 rounded-full transition transform"></span>
+          </span>
+        </label>
+      </div>
+
+      <!-- General Preferences -->
+      <form action="<%= settings_path %>" method="POST" class="space-y-4">
+        <div>
+          <label for="notifications" class="block text-left font-semibold text-gray-700 transition-colors duration-500">Notifications</label>
+          <select id="notifications" name="notifications" class="w-full border border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-blue-500">
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Save Changes</button>
+        </div>
+      </form>
+
+      <!-- Log Out Button -->
+      <div class="mt-8">
+        <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: 'bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition' %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const body = document.body;
+    const toggle = document.getElementById("dark-mode-toggle");
+    const dot = document.querySelector(".dot");
+
+    toggle.addEventListener("change", () => {
+      // Toggle the dark mode class on the body
+      body.classList.toggle("dark-mode");
+
+      // Move the dot on the toggle switch
+      dot.classList.toggle("translate-x-6");
+    });
+  </script>
+</body>
+
+</html>
