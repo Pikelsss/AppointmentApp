@@ -10,6 +10,7 @@
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="stimulus_application.js" defer></script>
   <style>
     .bg-animated-gradient {
       background: linear-gradient(-45deg, #667eea, #764ba2, #6b8dd6, #8e37d7);
@@ -83,7 +84,9 @@
             <td><%= appointment.start_date.strftime('%I:%M %p') %></td>
             <td class="text-right">
               <%= link_to 'View', appointment_path(appointment), class: 'text-blue-500' %>
-              <%= link_to 'Edit', edit_appointment_path(appointment), class: 'text-blue-500 ml-2' %>
+              <%= link_to 'Edit', edit_appointment_path(appointment), 
+                  class: 'text-blue-500 ml-2',
+                  data: { controller: 'appointment', action: 'click->appointment#editAppointment' } %>
               <%= button_to 'Delete', appointment_path(appointment),
                     method: :delete,
                     form: { data: { turbo_confirm: 'Are you sure?' } },
@@ -99,7 +102,9 @@
     </div>
 
     <div class="flex justify-between mt-6">
-      <%= link_to 'Edit', edit_appointment_path(@appointment), class: 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200' %>
+      <%= link_to 'Edit', edit_appointment_path(@appointment), 
+          class: 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200', 
+          data: { controller: 'appointment', action: 'click->appointment#editAppointment' } %>
       <%= link_to 'Back', appointments_path, class: 'bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition duration-200' %>
       <%= button_to 'Delete', appointment_path(@appointment), 
         method: :delete, 
@@ -108,6 +113,24 @@
       %>
     </div>
   </div>
+
+  <script>
+    // Example Stimulus Controller
+    (() => {
+      const application = Stimulus.Application.start();
+
+      application.register("appointment", class extends Stimulus.Controller {
+        editAppointment(event) {
+          // Prevent default action
+          event.preventDefault();
+
+          // Redirect to the edit page
+          const url = event.currentTarget.getAttribute('href');
+          window.location.href = url;
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>

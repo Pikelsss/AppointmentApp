@@ -1,14 +1,18 @@
 class AppointmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_appointment, only: [:show, :edit, :update, :destroy]
+  before_action :set_appointment, only: [:edit, :update, :delete]
 
   def index
-    @appointments = current_user.appointments
-    @new_appointment_id = params[:new_appointment_id] if params[:new_appointment_id]
+    @appointments = Appointment.all
   end
 
   def show
+    @appointment = current_user.appointments.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to appointments_path, alert: 'Appointment not found.'
   end
+  
+  
 
   def new
     @appointment = Appointment.new
@@ -17,9 +21,10 @@ class AppointmentsController < ApplicationController
   def create
     @appointment = current_user.appointments.build(appointment_params)
     if @appointment.save
-      redirect_to appointments_path(new_appointment_id: @appointment.id), notice: 'Appointment was successfully created.'
+      redirect_to @appointment, notice: 'Appointment was successfully created.'
     else
-      render :new
+      flash.now[:alert] = 'Error creating appointment.'
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -28,13 +33,15 @@ class AppointmentsController < ApplicationController
 
   def update
     if @appointment.update(appointment_params)
-      redirect_to appointments_path, notice: 'Appointment was successfully updated.'
+      redirect_to @appointment, notice: 'Appointment was successfully updated.'
     else
+      flash.now[:alert] = 'Error updating appointment.'
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
+    @appointment = current_user.appointments.find(params[:id])
     @appointment.destroy
     redirect_to appointments_path, notice: 'Appointment was successfully deleted.'
   end
@@ -43,6 +50,8 @@ class AppointmentsController < ApplicationController
 
   def set_appointment
     @appointment = current_user.appointments.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to appointments_path, alert: 'Appointment not found.'
   end
 
   def appointment_params

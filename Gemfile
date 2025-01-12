@@ -26,6 +26,9 @@ gem "tailwindcss-rails"
 # Use Hotwire for modern web features (includes Turbo and Stimulus)
 gem "hotwire-rails"
 
+# Use jsbundling-rails for bundling JavaScripts
+gem "jsbundling-rails"
+
 # Authentication solution for Rails
 gem "devise"
 
@@ -66,3 +69,4 @@ end
 # Use RBS for type checking
 gem "rbs", "~> 3.7"
 gem 'rails-ujs'
+gem 'solargraph'

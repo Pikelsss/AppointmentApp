@@ -1,4 +1,3 @@
-// app/javascript/controllers/dropdown_controller.js
 document.addEventListener('click', function (event) {
   const dropdowns = document.querySelectorAll('.dropdown');
   dropdowns.forEach(dropdown => {

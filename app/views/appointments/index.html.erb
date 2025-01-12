@@ -4,13 +4,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appointment App</title>
+  <title>Appointment Manager - Appointment App</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@hotwired/turbo@7.2.0/dist/turbo.min.js" defer></script>
+  <script src="https://unpkg.com/@hotwired/stimulus/dist/stimulus.umd.js" defer></script>
   <style>
     .bg-animated-gradient {
       background: linear-gradient(-45deg, #667eea, #764ba2, #6b8dd6, #8e37d7);
       background-size: 400% 400%;
       animation: gradientBG 10s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 1s ease-out;
+    }
+
+    .zoom:hover {
+      animation: zoomIn 0.5s forwards, shadowPulse 0.5s forwards;
+      background: linear-gradient(135deg, #667eea, #6b8dd6);
+      color: white;
+      border-radius: 8px;
+    }
+
+    @keyframes shadowPulse {
+      0% {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      100% {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .input-focus:focus {
+      border-color: #6e7dff;
+      box-shadow: 0 0 0 2px rgba(110, 125, 255, 0.5);
+    }
+
+    .btn-animate {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .btn-animate:hover {
+      transform: scale(1.05);
+      background-color: #1d4ed8;
     }
   </style>
 </head>
@@ -24,79 +87,176 @@
       <%= link_to 'Settings', settings_path, class: 'px-4 py-2 hover:bg-gray-200 rounded-md transition duration-200 zoom' %>
     </div>
 
-    <div id="welcome-message" class="text-center mt-16">
-      <h1 class="text-3xl font-bold">Welcome</h1>
-      <p class="text-lg">To</p>
-      <h2 class="text-2xl font-semibold mt-2">Appointment App</h2>
-      <p class="mt-4 text-lg">Start Creating your own Appointments</p>
-      <p class="text-lg">with your specific expert</p>
-    </div>
 
-    <div id="appointments-section" class="hidden">
-      <div class="flex justify-between mb-6">
-        <h1 class="text-xl">Appointments</h1>
-        <button class="bg-blue-500 text-white px-4 py-2" onclick="window.location.href='<%= new_appointment_path %>'">New Appointment</button>
+    <div class="text-center mt-16">
+      <h1 class="text-3xl font-bold text-gray-800 mb-8">Manage Your Appointments</h1>
+
+      <div id="welcome-message" class="mb-6">
+        <h2 class="text-xl">Welcome to the Appointment Manager!</h2>
+        <p class="mt-2">Click below to manage your appointments.</p>
+        <button onclick="showAppointments()" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded-md btn-animate">Manage Appointments</button>
       </div>
 
-      <div class="bg-white p-6">
-        <table class="w-full">
-          <thead>
-            <tr>
-              <th class="text-left">Title</th>
-              <th class="text-left">Description</th>
-              <th class="text-left">Start Date</th>
-              <th class="text-left">End Date</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="appointments-list">
-          </tbody>
-        </table>
+      <div id="appointments-section" class="hidden" data-controller="appointments">
+        <div class="flex justify-between mb-6">
+          <h1 class="text-xl">Appointments</h1>
+          <button data-action="click->appointments#add" onclick="showAppointmentForm()" class="bg-blue-500 text-white px-4 py-2 rounded-md btn-animate">New Appointment</button>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="text-left">Title</th>
+                <th class="text-left">Description</th>
+                <th class="text-left">Start Date</th>
+                <th class="text-left">End Date</th>
+                <th class="text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="appointments-list" data-appointments-target="list">
+            </tbody>
+          </table>
+        </div>
+
+        <button onclick="returnToMainPage()" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded-md btn-animate">Return to Main Page</button>
+      </div>
+
+      <div id="appointment-form" class="hidden mt-6">
+        <h2 class="text-2xl font-semibold">New Appointment</h2>
+        <form id="form" onsubmit="createAppointment(event)">
+          <input type="hidden" id="appointment-id">
+          <div class="mb-4">
+            <label for="title" class="block text-left font-medium text-gray-700">Appointment Name:</label>
+            <input type="text" id="title" placeholder="Enter appointment name" class="w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" required>
+          </div>
+          <div class="grid grid-cols-2 gap-6 mb-4">
+            <div>
+              <label for="start_date" class="block font-medium text-gray-700">Start Date:</label>
+              <input type="datetime-local" id="start_date" class="w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" required>
+            </div>
+            <div>
+              <label for="end_date" class="block font-medium text-gray-700">End Date:</label>
+              <input type="datetime-local" id="end_date" class="w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" required>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="description" class="block font-medium text-gray-700">Description:</label>
+            <textarea id="description" rows="4" placeholder="Describe your appointment..." class="w-full border border-gray-300 p-3 mt-1 rounded-md input-focus transition duration-200" required></textarea>
+          </div>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Save Appointment</button>
+          <button type="button" onclick="cancelAppointment()" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2">Cancel</button>
+        </form>
+
+        <button onclick="returnToMainPage()" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded-md btn-animate">Return to Main Page</button>
       </div>
     </div>
-  </div>
 
-  <script>
-    let appointments = [];
+    <script>
+      const appointments = [];
 
-    function updateAppointments() {
-      const appointmentsList = document.getElementById('appointments-list');
-      appointmentsList.innerHTML = '';
-      appointments.forEach((appointment, index) => {
-        appointmentsList.innerHTML += `
-          <tr class="border-t">
-            <td class="py-3">${appointment.title}</td>
-            <td>${appointment.description}</td>
-            <td>${appointment.start_date.toLocaleString()}</td>
-            <td>${appointment.end_date.toLocaleString()}</td>
-            <td class="text-right">
-              <button class="text-blue-500" onclick="editAppointment(${index})">Edit</button>
-              <button class="text-red-500" onclick="deleteAppointment(${index})">Delete</button>
+      function showAppointments() {
+        document.getElementById('welcome-message').classList.add('hidden');
+        document.getElementById('appointments-section').classList.remove('hidden');
+        updateAppointments();
+      }
+
+      function returnToMainPage() {
+        document.getElementById('appointments-section').classList.add('hidden');
+        document.getElementById('appointment-form').classList.add('hidden');
+        document.getElementById('welcome-message').classList.remove('hidden');
+        clearForm();
+      }
+
+      function showAppointmentForm() {
+        document.getElementById('appointments-section').classList.add('hidden');
+        document.getElementById('appointment-form').classList.remove('hidden');
+        clearForm();
+      }
+
+      function cancelAppointment() {
+        document.getElementById('appointment-form').classList.add('hidden');
+        document.getElementById('appointments-section').classList.remove('hidden');
+        clearForm();
+      }
+
+      function createAppointment(event) {
+        event.preventDefault();
+        const id = document.getElementById('appointment-id').value;
+        const title = document.getElementById('title').value;
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+        const description = document.getElementById('description').value;
+
+        if (id) {
+          const index = appointments.findIndex(appt => appt.id === id);
+          appointments[index] = {
+            id,
+            title,
+            startDate,
+            endDate,
+            description
+          };
+        } else {
+          appointments.push({
+            id: Date.now().toString(),
+            title,
+            startDate,
+            endDate,
+            description
+          });
+        }
+
+        clearForm();
+        returnToMainPage();
+        updateAppointments();
+      }
+
+      function updateAppointments() {
+        const list = document.getElementById('appointments-list');
+        list.innerHTML = '';
+        appointments.forEach(appt => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${appt.title}</td>
+            <td>${appt.description}</td>
+            <td>${new Date(appt.startDate).toLocaleString()}</td>
+            <td>${new Date(appt.endDate).toLocaleString()}</td>
+            <td>
+              <button onclick="editAppointment('${appt.id}')" class="bg-yellow-500 text-white px-2 py-1 rounded-md">Edit</button>
+              <button onclick="deleteAppointment('${appt.id}')" class="bg-red-500 text-white px-2 py-1 rounded-md">Delete</button>
             </td>
-          </tr>`;
-      });
-    }
+          `;
+          list.appendChild(row);
+        });
+      }
 
-    function switchToAppointments() {
-      document.getElementById('welcome-message').classList.add('hidden');
-      document.getElementById('appointments-section').classList.remove('hidden');
-    }
+      function editAppointment(id) {
+        const appt = appointments.find(appt => appt.id === id);
+        document.getElementById('appointment-id').value = appt.id;
+        document.getElementById('title').value = appt.title;
+        document.getElementById('start_date').value = appt.startDate;
+        document.getElementById('end_date').value = appt.endDate;
+        document.getElementById('description').value = appt.description;
 
-    function deleteAppointment(index) {
-      if (confirm('Are you sure you want to delete this appointment?')) {
+        document.getElementById('appointments-section').classList.add('hidden');
+        document.getElementById('appointment-form').classList.remove('hidden');
+      }
+
+      function deleteAppointment(id) {
+        const index = appointments.findIndex(appt => appt.id === id);
         appointments.splice(index, 1);
         updateAppointments();
-        if (appointments.length === 0) {
-          document.getElementById('appointments-section').classList.add('hidden');
-          document.getElementById('welcome-message').classList.remove('hidden');
-        }
       }
-    }
 
-    function editAppointment(index) {
-      alert('Edit functionality is not implemented yet.');
-    }
-  </script>
+      function clearForm() {
+        document.getElementById('appointment-id').value = '';
+        document.getElementById('title').value = '';
+        document.getElementById('start_date').value = '';
+        document.getElementById('end_date').value = '';
+        document.getElementById('description').value = '';
+      }
+    </script>
 </body>
 
 </html>
